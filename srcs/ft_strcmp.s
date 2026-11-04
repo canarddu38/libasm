@@ -5,21 +5,23 @@ ft_strcmp:
 	mov rax, 0
 
 .loop:
-	mov bh, [rsi + rax]
-	or byte bh, [rdi + rax]
-	cmp byte bh, 0
+	movzx edx, byte [rdi + rax]
+	movzx ecx, byte [rsi + rax]
+	
+	cmp ecx, edx
+	jne .diff_result
+
+	test ecx, ecx
 	je .end
 
-	mov bh, [rsi + rax]
-	cmp byte bh, [rdi + rax]
-	je .diff_result
-	
 	inc rax
 	jmp .loop
 
 .diff_result:
-	mov rax, al
+	sub edx, ecx
+	mov eax, edx
 	ret
 
 .end:
+	mov rax, 0
 	ret
