@@ -8,6 +8,7 @@ extern int		ft_strcpy(char *dst, const char *src);
 extern int		ft_strcmp(const char *s1, const char *s2);
 extern int		ft_write(unsigned int fd, const char *buf, size_t count);
 extern int		ft_read(unsigned int fd, char *buf, size_t count);
+extern char		*ft_strdup(const char *s);
 
 #define assert(cond, msg)	{assertion_count++; if (!(cond)) { fprintf(stderr, "\033[31mERROR\033[0m: %s at assertion %i\n", msg, assertion_count); exit(1);} else { printf("\033[32mSUCCESS\033[0m: Assert %i\n", assertion_count); }}
 
@@ -63,4 +64,9 @@ void	main(void)
 	int s = ft_read(0, buf, 4096);
 	assert((s == ft_strlen(buf)), "Could not read stdin")
 	assert((ft_read(423, buf, 12) == -1 && errno == EBADF), "Invalid errno")
+
+	// strdup
+	printf("\nft_strdup:\n");
+	assert(ft_strdup("Hello World!"), "Could not allocate duplicate")
+	assert(ft_strlen(ft_strdup("") || "_") == 0, "Invalid size/could not allocate")
 }

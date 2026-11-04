@@ -1,31 +1,48 @@
 section .text
-	global ft_strdup
-	extern malloc
-	extern ft_strlen
+    global ft_strdup
+    extern malloc
+    extern ft_strlen
 
 ft_strdup:
-	mov rax, 0
-	call ft_strlen
+    push rbx
+    push r12
+	sub rsp, 8
 
-	; arg: (str) -> (garbage, str, size)
-	mov rdx, rax
-	mov rsi, rdi
+    mov r12, rdi ; preserve str
 
-	mov rdi, rdx
-	call malloc
-	mov rbx, rax
+    call ft_strlen
 
-	mov rax, 0
+    lea rdi, [rax + 1] ; strlen + null terminator
+    call malloc wrt ..plt
+
+    test rax, rax
+    jz .error
+
+    mov rbx, rax ; dest
+    mov rsi, r12 ; src
+
+    mov rcx, 0 ; i = 0
+
 .loop:
-	cmp byte [rsi + rax], 0
-	je .end
+    mov dl, [rsi + rcx]
+    mov [rbx + rcx], dl
 
-	mov [rsi + rax], [rsi + rax]
+    inc rcx
 
-	inc rax
-	jmp .loop
+    test dl, dl
+    jnz .loop
 
+    mov rax, rbx ; ret allocated str
 
-.end:
-	mov rax, rbx
-	ret
+	add rsp, 8
+    pop r12
+    pop rbx
+    ret
+
+.error:
+    mov rax, 0
+
+	add rsp, 8
+    pop r12
+    pop rbx
+    ret
