@@ -4,7 +4,8 @@ SRC			= srcs/ft_strlen.s \
 			  srcs/ft_strcmp.s \
 			  srcs/ft_write.s \
 			  srcs/ft_read.s \
-			  srcs/ft_strdup.s
+			  srcs/ft_strdup.s \
+			  srcs/ft_calloc.s
 O_FILES		= $(SRC:%.s=%.o)
 
 all: $(NAME)

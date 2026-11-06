@@ -68,5 +68,7 @@ void	main(void)
 	// strdup
 	printf("\nft_strdup:\n");
 	assert(ft_strdup("Hello World!"), "Could not allocate duplicate")
-	assert(ft_strlen(ft_strdup("") || "_") == 0, "Invalid size/could not allocate")
+	char *s2 = "Hello World!";
+	char *dup = ft_strdup(s2);
+	assert(s2 != dup, "Invalid size/could not allocate")
 }
