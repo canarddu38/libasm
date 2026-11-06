@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <stdint.h>
+
+#ifndef BONUS
+	#define BONUS	0
+#endif
 
 extern int		ft_strlen(const char *s);
 extern int		ft_strcpy(char *dst, const char *src);
@@ -9,6 +14,11 @@ extern int		ft_strcmp(const char *s1, const char *s2);
 extern int		ft_write(unsigned int fd, const char *buf, size_t count);
 extern int		ft_read(unsigned int fd, char *buf, size_t count);
 extern char		*ft_strdup(const char *s);
+extern void		*ft_calloc(size_t nmemb, size_t size);
+
+#if BONUS == 1
+	extern int	ft_atoi_base(char *str, char *base);
+#endif
 
 #define assert(cond, msg)	{assertion_count++; if (!(cond)) { fprintf(stderr, "\033[31mERROR\033[0m: %s at assertion %i\n", msg, assertion_count); exit(1);} else { printf("\033[32mSUCCESS\033[0m: Assert %i\n", assertion_count); }}
 
@@ -71,4 +81,19 @@ void	main(void)
 	char *s2 = "Hello World!";
 	char *dup = ft_strdup(s2);
 	assert(s2 != dup, "Invalid size/could not allocate")
+
+	// calloc
+	printf("\nft_calloc:\n");
+	void *mem = ft_calloc(4, 1);
+	assert(((unsigned char *)mem)[0] | ((unsigned char *)mem)[3] == 0x0, "Memory not freed")
+	void *mem2 = ft_calloc(SIZE_MAX, 1);
+	assert(mem2 == 0 && errno == ENOMEM, "Errno invalid")
+	errno = 0;
+
+	mem2 = ft_calloc(SIZE_MAX, 2);
+	assert(mem2 == 0 && errno != ENOMEM, "Overflow undetected")
+
+	#if BONUS == 1
+		printf("\n--- BONUS PART ---\n");
+	#endif
 }

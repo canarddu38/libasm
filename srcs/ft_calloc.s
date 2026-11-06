@@ -3,17 +3,38 @@ section .text
     extern malloc
 
 ft_calloc:
-	; rdi nmemb
-	; rsi size
+    ; check mul overflow
+    mov rax, rdi
+    mul rsi
 
-	; TODO: check nmemb * size size_t overflow
+    test rdx, rdx
+    jnz .error ; overflow
 
-	imul rdi, rsi
-	call malloc wrt ..plt
+    mov rdi, rax
+    push rdi
+    call malloc wrt ..plt
+    pop rcx ; rcx = total_size
 
-	test rax, rax
+    test rax, rax
     jz .error
 
-.error:
-	
+    ; clear memory
+    mov rdi, rax
 
+    mov rdx, 0 ; i = 0
+
+.loop:
+    cmp rdx, rcx
+    jge .end
+
+    mov byte [rdi + rdx], 0
+    inc rdx
+    jmp .loop
+
+.end:
+    mov rax, rdi
+    ret
+
+.error:
+    mov rax, 0
+    ret
